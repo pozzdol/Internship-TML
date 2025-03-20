@@ -1,13 +1,10 @@
 @extends('layouts.main')
-
 @section('content')
-
     <div class="card shadow-lg border-0">
         <div class="border border-2 border-dark">
             <h5 class="card-title text-center text-uppercase fw-bold text-dark">Proses Peningkatan Kinerja
             </h5>
             <div class="mb-2 border border-1 border-dark"></div>
-
             <!-- Informasi Utama -->
             <div class="px-5 py-3 pb-5">
                 <div class="row mb-4">
@@ -27,13 +24,12 @@
                                 <div class="col"><strong>Departemen Penerima</strong></div>
                                 <div class="col">: {{ $datalengkap['divisipenerima'] }}</div>
                             </div>
-
-
                         </div>
                         <div class="col-md-6">
                             <div class="row mb-3">
                                 <div class="col"><strong>Pembuat /
-                                        Inisiator</strong></div>
+                                        Inisiator</strong>
+                                </div>
                                 <div class="col">: {{ $ppklengkap->pembuatUser->nama_user }}</div>
                             </div>
                             <div class="row mb-3">
@@ -47,13 +43,11 @@
                             </div>
                         </div>
                     </div>
-
-
                 </div>
-
                 <!-- Ketidaksesuaian -->
                 <h6 class="fw-bold">1. Jelaskan ketidaksesuaian yang terjadi atau
-                    peningkatan yang akan dibuat</h6>
+                    peningkatan yang akan dibuat
+                </h6>
                 <p>Jenis:</p>
                 <div class="d-flex flex-wrap justify-content-evenly align-items-center">
                     <span class="fw-bold">
@@ -69,10 +63,7 @@
                         ( {{ str_contains($datalengkap['jenisketidaksesuaian'], 'AUDIT') ? '✔' : ' ' }} ) AUDIT
                     </span>
                 </div>
-
-
                 <p class="my-3 me-3" style="text-align: justify;">{{ $datalengkap['judul'] }}</p>
-
                 <div class="row">
                     <div class="col-md-7">
                         <h6 class="fw-bold">Evidence:</h6>
@@ -132,7 +123,6 @@
                             <div class="col">
                                 <img src="{{ $datalengkap['signaturePathPenerima'] }}"
                                     style="max-width: 100px; height: 50px; object-fit: cover; overflow: hidden;">
-
                             </div>
                         </div>
                     </div>
@@ -145,7 +135,6 @@
                     2. Identifikasi, evaluasi & pastikan akar penyebab masalah/Root Cause
                 </label>
                 <br><br>
-
                 @if ($ppk->identifikasi)
                     <p style="text-align: justify;" class="me-3">
                         {{ old('identifikasi', $ppk->identifikasi) }}
@@ -153,7 +142,6 @@
                 @else
                     <p>Data tidak tersedia</p>
                 @endif
-
                 <span style="font-size: 0.750em;">
                     *Gunakan metode 5WHYS untuk menentukan Root Cause; Fish Bone; Diagram alir; Penilaian situasi; Kendali
                     proses dan peningkatan.
@@ -161,23 +149,19 @@
             </div>
         </div>
     </div>
-
     <div class="card shadow-lg border-0">
         <div class="border border-2 border-dark">
             <h5 class="card-title text-center text-uppercase fw-bold text-dark">Proses Peningkatan Kinerja</h5>
             <div class="border border-1 border-dark"></div>
-
             <div class="p-3 px-5">
                 <!-- Edit Form -->
                 <form method="POST" action="{{ route('ppk.update2', $ppk->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT') <!-- Method spoofing for update -->
-
                     <span style="font-size: 2rm;"><strong>3. Usulan tindakan: Jelaskan apa, siapa dan kapan akan
                             dilaksanakan
                             dan siapa yang akan melakukan tindakan Penanggulangan/Pencegahan tersebut dan kapan akan
                             diselesaikan.</strong></span>
-
                     <table class="mt-3" style="width: 100%; border: 2px solid black;">
                         <thead>
                             <tr>
@@ -191,11 +175,12 @@
                             <tr>
                                 <td style="border: 2px solid black; vertical-align: top; vertical-align: top;"
                                     class="p-3">
-                                    Penanggulangan</td>
+                                    Penanggulangan
+                                </td>
                                 <td style="border: 2px solid black; vertical-align: top;" class="p-3">
-                                    <textarea id="penanggulangan" name="penanggulangan" class="form-control" placeholder="" cols="30">
-                                                {{ old('penanggulangan', $ppk->penanggulangan) }}
-                                            </textarea>
+                                    <textarea id="penanggulangan" name="penanggulangan" class="form-control">
+                        {{ old('penanggulangan', $ppk->penanggulangan) }}
+                        </textarea>
                                 </td>
                                 <td style="border: 2px solid black; vertical-align: top;" class="p-3">
                                     <input type="date" name="tgl_penanggulangan" class="form-control"
@@ -210,7 +195,6 @@
                                                 {{ old('use_pic1', $ppk->use_pic1) ? 'checked' : '' }}>
                                             <label class="form-check-label" for="use-pic1">Opsi</label>
                                         </div>
-
                                         <!-- Dropdown PIC 1 -->
                                         <div id="pic1-container" class="pic1-dropdown">
                                             @php
@@ -232,13 +216,13 @@
                                                 </div>
                                             @endforeach
                                         </div>
-
                                         <!-- Textarea PIC Other -->
                                         <div id="pic1-other" class="pic1-other" style="display: none;">
-                                            <textarea name="pic1_other" id="pic1_other" class="form-control" placeholder="Silahkan masukan PIC diluar option">{{ old('pic1_other', $ppk->pic1_other) }}</textarea>
+                                            <textarea name="pic1_other" id="pic1_other" class="form-control">
+                              {{ old('pic1_other', $ppk->pic1_other) }}
+                              </textarea>
                                         </div>
                                     </div>
-
                                     <div style="text-align: right;">
                                         <button type="button" class="btn btn-outline-primary add-pic"
                                             data-target="pic1-container">
@@ -251,8 +235,8 @@
                                 <td style="border: 2px solid black; vertical-align: top;" class="p-3">Pencegahan</td>
                                 <td style="border: 2px solid black; vertical-align: top;" class="p-3">
                                     <textarea id="pencegahan" name="pencegahan" class="form-control" placeholder="" cols="30">
-                                        {{ old('pencegahan') ?? $ppk->pencegahan }}
-                                    </textarea>
+                        {{ old('pencegahan') ?? $ppk->pencegahan }}
+                        </textarea>
                                 </td>
                                 <td style="border: 2px solid black; vertical-align: top;" class="p-3">
                                     <input type="date" name="tgl_pencegahan" class="form-control"
@@ -267,7 +251,6 @@
                                                 {{ old('use_pic2', $ppk->use_pic2) ? 'checked' : '' }}>
                                             <label class="form-check-label" for="use-pic2">Pilih PIC 2</label>
                                         </div>
-
                                         <!-- Dropdown PIC 2 -->
                                         <div id="pic2-container" class="pic2-dropdown">
                                             @php
@@ -289,13 +272,11 @@
                                                 </div>
                                             @endforeach
                                         </div>
-
                                         <!-- Textarea PIC Other -->
                                         <div id="pic2-other" class="pic2-other" style="display: none;">
                                             <textarea name="pic2_other" id="pic2_other" class="form-control">{{ old('pic2_other', $ppk->pic2_other) }}</textarea>
                                         </div>
                                     </div>
-
                                     <div style="text-align: right;">
                                         <button type="button" class="btn btn-outline-primary add-pic"
                                             data-target="pic2-container">
@@ -306,8 +287,6 @@
                             </tr>
                         </tbody>
                     </table>
-
-
                     <div class="mb-3 d-none">
                         <label for="identifikasi" class="form-label fw-bold">2. Identifikasi, evaluasi & pastikan akar
                             penyebab
@@ -320,7 +299,6 @@
                             Diagram
                             alir; Penilaian situasi; Kendali proses dan peningkatan.</span>
                     </div>
-
                     {{-- auto resizing text area --}}
                     <script>
                         // Mendapatkan kedua elemen textarea
@@ -346,8 +324,6 @@
                         autoResizeTextarea(textarea1);
                         autoResizeTextarea(textarea2);
                     </script>
-
-
                     <script>
                         // Menambahkan event listener untuk checkbox
                         document.getElementById('use-pic1').addEventListener('change', function() {
@@ -363,7 +339,6 @@
                             }
                         });
                     </script>
-
                     <script>
                         // Menambahkan event listener untuk checkbox PIC 2
                         document.getElementById('use-pic2').addEventListener('change', function() {
@@ -379,9 +354,6 @@
                             }
                         });
                     </script>
-
-
-
                     <script>
                         // Tambah dropdown PIC 1
                         document.querySelector('.add-pic[data-target="pic1-container"]').addEventListener('click', function() {
@@ -389,14 +361,14 @@
                             const newPic = document.createElement('div');
                             newPic.classList.add('input-group', 'mb-2');
                             newPic.innerHTML = `
-                <select name="pic1[]" class="form-select">
-                    <option value="">Pilih PIC</option>
-                    @foreach ($data as $user)
-                        <option value="{{ $user->id }}">{{ $user->nama_user }}</option>
-                    @endforeach
-                </select>
-                <button type="button" class="btn btn-outline-danger remove-pic">-</button>
-            `;
+               <select name="pic1[]" class="form-select">
+               <option value="">Pilih PIC</option>
+               @foreach ($data as $user)
+               <option value="{{ $user->id }}">{{ $user->nama_user }}</option>
+               @endforeach
+               </select>
+               <button type="button" class="btn btn-outline-danger remove-pic">-</button>
+               `;
                             container.appendChild(newPic);
                         });
 
@@ -412,14 +384,14 @@
                             const newPic = document.createElement('div');
                             newPic.classList.add('input-group', 'mb-2');
                             newPic.innerHTML = `
-                <select name="pic2[]" class="form-select">
-                    <option value="">Pilih PIC</option>
-                    @foreach ($data as $user)
-                        <option value="{{ $user->id }}">{{ $user->nama_user }}</option>
-                    @endforeach
-                </select>
-                <button type="button" class="btn btn-outline-danger remove-pic">-</button>
-            `;
+               <select name="pic2[]" class="form-select">
+               <option value="">Pilih PIC</option>
+               @foreach ($data as $user)
+               <option value="{{ $user->id }}">{{ $user->nama_user }}</option>
+               @endforeach
+               </select>
+               <button type="button" class="btn btn-outline-danger remove-pic">-</button>
+               `;
                             container.appendChild(newPic);
                         });
 
@@ -430,7 +402,6 @@
                             }
                         });
                     </script>
-
                     <div class="row mt-3">
                         <div class="col-md-7 text-center">
                             <p>Tanggal : <span class="ps-5"
@@ -442,7 +413,6 @@
                             <img src="{{ $datalengkap['signaturePathPenerima'] }}" alt="Signature" width="100">
                         </div>
                     </div>
-
                     <div class="d-flex justify-content-between align-items-center mt-3">
                         <a href="{{ route('ppk.index') }}" class="btn btn-secondary">Kembali</a>
                         <button type="submit" class="btn btn-primary">Update <i class="ri-save-3-fill"></i></button>

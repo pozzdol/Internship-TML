@@ -159,7 +159,7 @@ class PpkController extends Controller
             'cc_email' => 'nullable|array',
             'cc_email.*' => 'email',
             'evidence' => 'nullable|array',
-            'evidence.*' => 'file|mimes:jpg,jpeg,png,xlsx,xls,doc,docx|max:5120', // ensure proper validation for each file
+            'evidence.*' => 'file|mimes:jpg,jpeg,png,xlsx,xls,doc,docx,pdf', // ensure proper validation for each file
             'signature' => 'nullable|string',
             'signature_file' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
             'identifikasi' => 'nullable|string|max:1000',
@@ -368,10 +368,17 @@ class PpkController extends Controller
 
     public function create2($id)
     {
-
+        $ppk = Ppkkedua::where('id_formppk', $id)->firstOrFail();
         $ppklengkap = Ppk::with('pembuatUser', 'penerimaUser')->findOrFail($id);
 
         $signaturePath = $ppklengkap->signature ? public_path('admin/img/' . $ppklengkap->signature) : null;
+        $signaturePathPenerima = $ppk->signaturepenerima ? public_path('admin/img/' . $ppk->signaturepenerima) : null;
+        $signatureBase64Penerima = null;
+        if ($signaturePathPenerima && file_exists($signaturePathPenerima)) {
+            $imageData = base64_encode(file_get_contents($signaturePathPenerima));
+            $extension = pathinfo($signaturePathPenerima, PATHINFO_EXTENSION);
+            $signatureBase64Penerima = "data:image/{$extension};base64,{$imageData}";
+        }
         $signatureBase64 = null;
         if ($signaturePath && file_exists($signaturePath)) {
             $imageData = base64_encode(file_get_contents($signaturePath));
@@ -392,6 +399,7 @@ class PpkController extends Controller
             'evidence' => json_decode($ppklengkap->evidence, true),
             'created_at' => $ppklengkap->created_at,
             'signature' => $signatureBase64, // Berisi data base64 dari signature
+            'signaturePathPenerima' => $signatureBase64Penerima
         ];
 
         $data = User::all()->sortBy('nama_user');

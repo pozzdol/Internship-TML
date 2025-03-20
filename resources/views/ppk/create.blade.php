@@ -2,8 +2,8 @@
 
 @section('content')
     <!-- Pastikan Bootstrap Icons sudah terpasang. Jika belum, tambahkan link berikut di head layout utama:
-                                                                                                                                     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-                                                                                                                                -->
+                                                                                                                                                         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+                                                                                                                                                    -->
 
     <body>
         <div class="card shadow-lg border-0">
@@ -35,6 +35,23 @@
                             <textarea name="judul" id="inputJudul" class="form-control rounded-3 " rows="5"
                                 placeholder="Tulis penjelasan Anda di sini..." onfocus="this.classList.add('border-primary')"
                                 onblur="this.classList.remove('border-primary')">{{ old('judul') }}</textarea>
+
+                            <script>
+                                // Mendapatkan elemen textarea
+                                const textarea = document.getElementById('inputJudul');
+
+                                // Fungsi untuk mengubah tinggi textarea sesuai dengan isi
+                                function autoResizeTextarea() {
+                                    textarea.style.height = 'auto'; // Reset tinggi terlebih dahulu
+                                    textarea.style.height = (textarea.scrollHeight) + 'px'; // Set tinggi sesuai dengan scrollHeight
+                                }
+
+                                // Menambahkan event listener untuk input
+                                textarea.addEventListener('input', autoResizeTextarea);
+
+                                // Panggil fungsi untuk mengatur tinggi saat halaman pertama kali dimuat
+                                autoResizeTextarea();
+                            </script>
                             <i class="bi bi-pencil-fill position-absolute text-secondary"
                                 style="right: 10px; bottom: 10px;"></i>
                         </div>
@@ -48,7 +65,7 @@
                         </label>
                         <div>
                             <input type="file" id="evidence" name="evidence[]" class="form-control " multiple
-                                accept="image/*" onchange="previewImages(event)">
+                                accept="image/*,.xlsx,.xls,.doc,.docx,.pdf" onchange="previewImages(event)">
                             <!-- Preview container for uploaded files -->
                             <div id="evidencePreviewContainer" class="mt-3 d-flex flex-wrap gap-3"></div>
                         </div>
@@ -191,7 +208,8 @@
                             <div id="option2-container" class="mb-3 border p-3 rounded bg-light d-none">
                                 <p class="fw-bold text-secondary"><i class="bi bi-file-earmark-image"></i> Opsi 2: Unggah
                                     file tanda tangan</p>
-                                <input type="file" name="signature_file" id="signature-file" class="form-control">
+                                <input type="file" name="signature_file" id="signature-file" class="form-control"
+                                    accept="image/png">
                                 <small class="text-muted d-block mt-2">Format file yang didukung: JPG, JPEG, PNG</small>
                             </div>
                         </div>

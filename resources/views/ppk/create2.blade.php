@@ -9,103 +9,140 @@
     @endif
 
     <div class="card shadow-lg border-0">
-        <div class="card-body">
-            <h5 class="card-title text-center text-uppercase fw-bold text-secondary">Proses Peningkatan Kinerja
+        <div class="border border-2 border-dark">
+            <h5 class="card-title text-center text-uppercase fw-bold text-dark">Proses Peningkatan Kinerja
             </h5>
-            <hr class="mb-4 border-2 border-secondary">
+            <div class="mb-2 border border-1 border-dark"></div>
 
             <!-- Informasi Utama -->
-            <div class="mb-4">
-                <h6 class="fw-md text-secondary mb-3">
-                    <i class="bi bi-file-earmark-text"></i> PPK NO. {{ $datalengkap['nomor_surat'] }}
-                </h6>
-                <div class="row">
-                    <div class="col-md-6">
-                        <table class="table table-borderless">
-                            <tbody>
-                                <tr>
-                                    <td class="w-50"><i class="bi bi-person-check"></i> <strong>Penerima:</strong></td>
-                                    <td>{{ $ppklengkap->penerimaUser->nama_user }}</td>
-                                </tr>
-                                <tr>
-                                    <td><i class="bi bi-building"></i> <strong>Departemen Penerima:</strong></td>
-                                    <td>{{ $datalengkap['divisipenerima'] }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="w-50"><i class="bi bi-calendar-event"></i> <strong>Tanggal Terbit:</strong>
-                                    </td>
-                                    <td>{{ $ppklengkap->created_at->format('d/m/Y') }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+            <div class="px-5 py-3 pb-5">
+                <div class="row mb-4">
+                    <div class="row mb-4">
+                        <div class="col"><strong>KEPADA</strong></div>
+                        <h6 class="col fw-md text-secondary">
+                            PPK NO. {{ $datalengkap['nomor_surat'] }}
+                        </h6>
                     </div>
-                    <div class="col-md-6">
-                        <table class="table table-borderless">
-                            <tbody>
-                                <tr>
-                                    <td class="w-50"><i class="bi bi-person-badge"></i> <strong>Pembuat /
-                                            Inisiator:</strong></td>
-                                    <td>{{ $ppklengkap->pembuatUser->nama_user }}</td>
-                                </tr>
-                                <tr>
-                                    <td><i class="bi bi-building"></i> <strong>Departemen Pembuat:</strong></td>
-                                    <td>{{ $datalengkap['divisipembuat'] }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row mb-3">
+                                <div class="col"><strong>Penerima</strong></div>
+                                <div class="col">: {{ $ppklengkap->penerimaUser->nama_user }}</div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col"><strong>Departemen Penerima</strong></div>
+                                <div class="col">: {{ $datalengkap['divisipenerima'] }}</div>
+                            </div>
+
+
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row mb-3">
+                                <div class="col"><strong>Pembuat /
+                                        Inisiator</strong></div>
+                                <div class="col">: {{ $ppklengkap->pembuatUser->nama_user }}</div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col"> <strong>Departemen Pembuat</strong></div>
+                                <div class="col">: {{ $datalengkap['divisipembuat'] }}</div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col"><strong>Tanggal Terbit</strong>
+                                </div>
+                                <div class="col">: {{ $ppklengkap->created_at->format('d/m/Y') }}</div>
+                            </div>
+                        </div>
                     </div>
+
+
+                </div>
+
+                <!-- Ketidaksesuaian -->
+                <h6 class="fw-bold">1. Jelaskan ketidaksesuaian yang terjadi atau
+                    peningkatan yang akan dibuat</h6>
+                <p>Jenis:</p>
+                <div class="d-flex flex-wrap justify-content-evenly align-items-center">
+                    <span class="fw-bold">
+                        ( {{ str_contains($datalengkap['jenisketidaksesuaian'], 'SISTEM') ? '✔' : ' ' }} ) SISTEM
+                    </span>
+                    <span class="fw-bold">
+                        ( {{ str_contains($datalengkap['jenisketidaksesuaian'], 'PROSES') ? '✔' : ' ' }} ) PROSES
+                    </span>
+                    <span class="fw-bold">
+                        ( {{ str_contains($datalengkap['jenisketidaksesuaian'], 'PRODUK') ? '✔' : ' ' }} ) PRODUK
+                    </span>
+                    <span class="fw-bold">
+                        ( {{ str_contains($datalengkap['jenisketidaksesuaian'], 'AUDIT') ? '✔' : ' ' }} ) AUDIT
+                    </span>
                 </div>
 
 
-            </div>
+                <p class="my-3 me-3" style="text-align: justify;">{{ $datalengkap['judul'] }}</p>
 
-            <!-- Ketidaksesuaian -->
-            <h6 class="fw-bold"><i class="bi bi-exclamation-triangle"></i> 1. Jelaskan ketidaksesuaian yang terjadi atau
-                peningkatan yang akan dibuat</h6>
-            <p><strong>Jenis:</strong></p>
-            <div class="d-flex flex-wrap justify-content-evenly align-items-center">
-                <span
-                    class="badge {{ str_contains($datalengkap['jenisketidaksesuaian'], 'SISTEM') ? 'bg-success' : 'bg-secondary' }}">
-                    ( {{ str_contains($datalengkap['jenisketidaksesuaian'], 'SISTEM') ? '✔' : ' ' }} ) SISTEM
-                </span>
-                <span
-                    class="badge {{ str_contains($datalengkap['jenisketidaksesuaian'], 'PROSES') ? 'bg-success' : 'bg-secondary' }}">
-                    ( {{ str_contains($datalengkap['jenisketidaksesuaian'], 'PROSES') ? '✔' : ' ' }} ) PROSES
-                </span>
-                <span
-                    class="badge {{ str_contains($datalengkap['jenisketidaksesuaian'], 'PRODUK') ? 'bg-success' : 'bg-secondary' }}">
-                    ( {{ str_contains($datalengkap['jenisketidaksesuaian'], 'PRODUK') ? '✔' : ' ' }} ) PRODUK
-                </span>
-                <span
-                    class="badge {{ str_contains($datalengkap['jenisketidaksesuaian'], 'AUDIT') ? 'bg-success' : 'bg-secondary' }}">
-                    ( {{ str_contains($datalengkap['jenisketidaksesuaian'], 'AUDIT') ? '✔' : ' ' }} ) AUDIT
-                </span>
-            </div>
+                <div class="row">
+                    <div class="col-md-7">
+                        <h6 class="fw-bold">Evidence:</h6>
+                        <div class="d-flex flex-wrap gap-2">
+                            @if (!empty($datalengkap['evidence']))
+                                @foreach ($datalengkap['evidence'] as $file)
+                                    <?php
+                                    $fileExtension = pathinfo($file, PATHINFO_EXTENSION);
+                                    $filePath = asset('storage/' . $file);
+                                    ?>
+                                    <div class="border p-2 rounded bg-light">
+                                        @if (in_array(strtolower($fileExtension), ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg']))
+                                            <img src="{{ asset('storage/' . $file) }}" alt="Evidence"
+                                                class="img-fluid rounded" style="max-width: 150px; max-height: 150px;">
+                                        @else
+                                            <style>
+                                                .hover {
+                                                    color: #151515
+                                                }
 
-
-            <p class="my-3 me-3" style="text-align: justify;">{{ $datalengkap['judul'] }}</p>
-
-            <!-- Evidence -->
-            <h6 class="fw-bold"><i class="bi bi-image"></i> Evidence:</h6>
-            <div class="d-flex flex-wrap gap-2">
-                @if (!empty($datalengkap['evidence']))
-                    @foreach ($datalengkap['evidence'] as $file)
-                        <div class="border p-2 rounded bg-light">
-                            <img src="{{ asset('storage/' . $file) }}" alt="Evidence" class="img-fluid rounded"
-                                style="max-width: 150px; max-height: 150px;">
+                                                .hover:hover {
+                                                    text-decoration: underline;
+                                                    color: #0d6efd !important;
+                                                    /* Warna biru Bootstrap */
+                                                }
+                                            </style>
+                                            <a href="{{ $filePath }}" target="_blank" class=" hover"
+                                                title="Download Evidence"
+                                                style="display: inline-block; max-width: 150px; overflow: hidden; text-overflow: ellipsis;">{{ basename($file) }}</a>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            @else
+                                <p class="text-muted"><i class="bi bi-x-circle"></i> Tidak ada evidence</p>
+                            @endif
                         </div>
-                    @endforeach
-                @else
-                    <p class="text-muted"><i class="bi bi-x-circle"></i> Tidak ada evidence</p>
-                @endif
-            </div>
+                    </div>
+                    <div class="col mt-4">
+                        <!-- Signature -->
+                        <div class="row">
+                            <div class="col-md-7 mt-7 ">
+                                <p class="mb-1"> Tanda Tangan<br />Inisiator/Auditor
+                                </p>
+                                <strong> {{ $ppklengkap->pembuatUser->nama_user }} </strong>
+                            </div>
+                            <div class="col">
+                                <img src="{{ $datalengkap['signature'] }}"
+                                    style="max-width: 100px; height: 50px; object-fit: cover; overflow: hidden;">
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-7 mt-7 ">
+                                <p class="mb-1"> Tanda Tangan<br />Proses Owner/Auditee
+                                </p>
+                                <strong> {{ $ppklengkap->penerimaUser->nama_user }} </strong>
+                            </div>
+                            <div class="col">
+                                <img src="{{ $datalengkap['signaturePathPenerima'] }}"
+                                    style="max-width: 100px; height: 50px; object-fit: cover; overflow: hidden;">
 
-            <!-- Signature -->
-            <div class="mt-7 text-end">
-                <p class="mb-1"> Tanda Tangan:</p>
-                <img src="{{ $datalengkap['signature'] }}" width="100">
-                <p class="mt-2">Inisiator/Auditor:<strong>
-                        {{ $ppklengkap->pembuatUser->nama_user }} </strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -136,7 +173,24 @@
                 <div class="mb-3">
                     <label for="identifikasi" class="form-label fw-bold">2. Identifikasi, evaluasi & pastikan akar penyebab
                         masalah/Root Cause*</label>
-                    <textarea placeholder="" name="identifikasi" class="form-control" id="identifikasi" rows="7">{{ old('identifikasi', $ppk->identifikasi ?? '') }}</textarea>
+                    <textarea placeholder="" name="identifikasi" class="form-control" id="identifikasi" rows="2">{{ old('identifikasi', $ppk->identifikasi ?? '') }}</textarea>
+
+                    <script>
+                        // Mendapatkan elemen textarea
+                        const textarea = document.getElementById('identifikasi');
+
+                        // Fungsi untuk mengubah tinggi textarea sesuai dengan isi
+                        function autoResizeTextarea() {
+                            textarea.style.height = 'auto'; // Reset tinggi terlebih dahulu
+                            textarea.style.height = (textarea.scrollHeight) + 'px'; // Set tinggi sesuai dengan scrollHeight
+                        }
+
+                        // Menambahkan event listener untuk input
+                        textarea.addEventListener('input', autoResizeTextarea);
+
+                        // Panggil fungsi untuk mengatur tinggi saat halaman pertama kali dimuat
+                        autoResizeTextarea();
+                    </script>
                     <span style="font-size: 0.750em;">*Gunakan metode 5WHYS untuk menentukan Root Cause; Fish Bone; Diagram
                         alir; Penilaian situasi; Kendali proses dan peningkatan.</span>
 
@@ -423,8 +477,8 @@
                             </div>
                             <div class="form-check">
                                 <div class="col-sm-10">
-                                    <input class="form-check-input" type="radio" name="signature_option" id="option2"
-                                        required value="2">
+                                    <input class="form-check-input" type="radio" name="signature_option"
+                                        id="option2" required value="2">
                                     <label class="form-check-label" for="option2"><strong>2. Unggah file tanda
                                             tangan</strong></label>
                                 </div>
@@ -434,7 +488,8 @@
                         <!-- Opsi untuk Menggambar Tanda Tangan -->
                         <div id="option1-container" class="mb-3 border p-3 rounded" style="background-color: #f8f9fa;">
                             <p class="fw-bold">Opsi 1: Tanda tangan langsung</p>
-                            <canvas id="signature-pad" class="border rounded" style="width: 100%; height: 200px;"></canvas>
+                            <canvas id="signature-pad" class="border rounded"
+                                style="width: 100%; height: 200px;"></canvas>
                             <button id="clear" title="Clear" type="button" class="btn btn-outline-secondary mt-2">
                                 <i class="bx bxs-eraser"></i> Clear
                             </button>
