@@ -212,4 +212,6 @@ return [
         'PDF' => Barryvdh\DomPDF\Facade::class,
     ])->toArray(),
 
+    'locale' => 'id',
+
 ];

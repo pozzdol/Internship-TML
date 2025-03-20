@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Ppkkedua extends Model
 {
@@ -22,31 +22,32 @@ class Ppkkedua extends Model
         'pic1_other',
         'pic2_other',
         'tgl_penanggulangan',
+        'updated_at',
         'tgl_pencegahan',
     ];
     public function formppk2()
-{
-    return $this->hasOne(Ppkkedua::class, 'id_formppk');
-}
-public function picUser()
-{
-    return $this->belongsTo(User::class, 'pic');
-}
+    {
+        return $this->hasOne(Ppkkedua::class, 'id_formppk');
+    }
+    public function picUser()
+    {
+        return $this->belongsTo(User::class, 'pic');
+    }
 
-public function pic1User()
-{
-    return $this->belongsTo(User::class, 'pic1','id');
-}
+    public function pic1User()
+    {
+        return $this->belongsTo(User::class, 'pic1', 'id');
+    }
 
-public function pic2User()
-{
-    return $this->belongsTo(User::class, 'pic2','id');
-}
-public function ppk() {
-    return $this->belongsTo(Ppk::class, 'id_formppk');
-}
+    public function pic2User()
+    {
+        return $this->belongsTo(User::class, 'pic2', 'id');
+    }
+    public function ppk()
+    {
+        return $this->belongsTo(Ppk::class, 'id_formppk');
+    }
 
- // Pastikan kolom target_tgl di-cast sebagai tanggal
- protected $dates = ['target_tgl'];
-
+    // Pastikan kolom target_tgl di-cast sebagai tanggal
+    protected $dates = ['target_tgl'];
 }

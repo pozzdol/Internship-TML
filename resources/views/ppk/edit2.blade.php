@@ -113,8 +113,8 @@
                     <div class="col mt-4">
                         <!-- Signature -->
                         <div class="row">
-                            <div class="col mt-7 ">
-                                <p class="mb-1"> Tanda Tangan:<br />Inisiator/Auditor:
+                            <div class="col-md-7 mt-7 ">
+                                <p class="mb-1"> Tanda Tangan<br />Inisiator/Auditor
                                 </p>
                                 <strong> {{ $ppklengkap->pembuatUser->nama_user }} </strong>
                             </div>
@@ -123,14 +123,14 @@
                                     style="max-width: 100px; height: 50px; object-fit: cover; overflow: hidden;">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col mt-7 ">
-                                <p class="mb-1"> Tanda Tangan:<br />Inisiator/Auditor:
+                        <div class="row mt-4">
+                            <div class="col-md-7 mt-7 ">
+                                <p class="mb-1"> Tanda Tangan<br />Proses Owner/Auditee
                                 </p>
-                                <strong> {{ $ppklengkap->pembuatUser->nama_user }} </strong>
+                                <strong> {{ $ppklengkap->penerimaUser->nama_user }} </strong>
                             </div>
                             <div class="col">
-                                <img src="{{ $datalengkap['signature'] }}"
+                                <img src="{{ $datalengkap['signaturePathPenerima'] }}"
                                     style="max-width: 100px; height: 50px; object-fit: cover; overflow: hidden;">
 
                             </div>

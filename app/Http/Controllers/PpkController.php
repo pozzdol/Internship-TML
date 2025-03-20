@@ -529,11 +529,18 @@ class PpkController extends Controller
         $ppklengkap = Ppk::with('pembuatUser', 'penerimaUser')->findOrFail($id);
 
         $signaturePath = $ppklengkap->signature ? public_path('admin/img/' . $ppklengkap->signature) : null;
+        $signaturePathPenerima = $ppk->signaturepenerima ? public_path('admin/img/' . $ppk->signaturepenerima) : null;
         $signatureBase64 = null;
         if ($signaturePath && file_exists($signaturePath)) {
             $imageData = base64_encode(file_get_contents($signaturePath));
             $extension = pathinfo($signaturePath, PATHINFO_EXTENSION);
             $signatureBase64 = "data:image/{$extension};base64,{$imageData}";
+        }
+        $signatureBase64Penerima = null;
+        if ($signaturePathPenerima && file_exists($signaturePathPenerima)) {
+            $imageData = base64_encode(file_get_contents($signaturePathPenerima));
+            $extension = pathinfo($signaturePathPenerima, PATHINFO_EXTENSION);
+            $signatureBase64Penerima = "data:image/{$extension};base64,{$imageData}";
         }
         $datalengkap = [
             'ppk' => $ppklengkap,
@@ -549,6 +556,7 @@ class PpkController extends Controller
             'evidence' => json_decode($ppklengkap->evidence, true),
             'created_at' => $ppklengkap->created_at,
             'signature' => $signatureBase64, // Berisi data base64 dari signature
+            'signaturePathPenerima' => $signatureBase64Penerima
         ];
         // $data = User::all();
         $data = User::all()->sortBy('nama_user');
@@ -563,15 +571,21 @@ class PpkController extends Controller
     public function editUsulan($id)
     {
         $ppk = Ppkkedua::where('id_formppk', $id)->firstOrFail();
-        $identifikasi = $ppk->identifikasi;
         $ppklengkap = Ppk::with('pembuatUser', 'penerimaUser')->findOrFail($id);
 
         $signaturePath = $ppklengkap->signature ? public_path('admin/img/' . $ppklengkap->signature) : null;
+        $signaturePathPenerima = $ppk->signaturepenerima ? public_path('admin/img/' . $ppk->signaturepenerima) : null;
         $signatureBase64 = null;
         if ($signaturePath && file_exists($signaturePath)) {
             $imageData = base64_encode(file_get_contents($signaturePath));
             $extension = pathinfo($signaturePath, PATHINFO_EXTENSION);
             $signatureBase64 = "data:image/{$extension};base64,{$imageData}";
+        }
+        $signatureBase64Penerima = null;
+        if ($signaturePathPenerima && file_exists($signaturePathPenerima)) {
+            $imageData = base64_encode(file_get_contents($signaturePathPenerima));
+            $extension = pathinfo($signaturePathPenerima, PATHINFO_EXTENSION);
+            $signatureBase64Penerima = "data:image/{$extension};base64,{$imageData}";
         }
         $datalengkap = [
             'ppk' => $ppklengkap,
@@ -586,7 +600,9 @@ class PpkController extends Controller
             'jenisketidaksesuaian' => $ppklengkap->jenisketidaksesuaian,
             'evidence' => json_decode($ppklengkap->evidence, true),
             'created_at' => $ppklengkap->created_at,
+            'updated_at' => $ppk->updated_at,
             'signature' => $signatureBase64, // Berisi data base64 dari signature
+            'signaturePathPenerima' => $signatureBase64Penerima
         ];
         // $data = User::all();
         $data = User::all()->sortBy('nama_user');
@@ -595,7 +611,7 @@ class PpkController extends Controller
         // dd($data['48']);
 
         // Pass the PPK, users, and decoded values to the view
-        return view('ppk.editUsulan', compact('data', 'ppk', 'datalengkap', 'ppklengkap', 'identifikasi'));
+        return view('ppk.editUsulan', compact('data', 'ppk', 'datalengkap', 'ppklengkap'));
     }
 
 
