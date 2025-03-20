@@ -267,7 +267,7 @@ class PpkController extends Controller
                 'cc_email' => 'nullable|array',
                 'cc_email.*' => 'nullable|email',
                 'evidence' => 'nullable|array',
-                'evidence.*' => 'file|mimes:jpg,jpeg,png,xlsx,xls,doc,docx|max:5120',
+                'evidence.*' => 'file|mimes:jpg,jpeg,png,xlsx,xls,doc,docx,pdf',
                 'delete_evidence' => 'nullable|array',
             ]);
 
@@ -355,13 +355,14 @@ class PpkController extends Controller
     {
         $ppk = Ppk::findOrFail($id);
         $status = StatusPpk::all();
+        $ppkkedua = Ppkkedua::where('id_formppk', $id)->first();
 
         // Cek apakah evidence ada dan tidak kosong, kemudian ubah menjadi array
         $evidenceFiles = $ppk->evidence ? explode(',', $ppk->evidence) : [];
 
         $users = User::all()->sortBy('nama_user'); // Ganti 'name' dengan kolom yang ingin diurutkan
 
-        return view('ppk.edit', compact('ppk', 'users', 'evidenceFiles', 'status'));
+        return view('ppk.edit', compact('ppk', 'ppkkedua', 'users', 'evidenceFiles', 'status'));
     }
 
 
