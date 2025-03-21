@@ -504,8 +504,8 @@
                             style="background-color: #f8f9fa;">
                             <p class="fw-bold">Opsi 2: Unggah file tanda tangan</p>
                             <input type="file" name="signaturepenerima_file" id="signaturepenerima-file"
-                                class="form-control">
-                            <small class="text-muted d-block mt-2">Format file yang didukung: jpg, jpeg, png</small>
+                                class="form-control" accept="image/png">
+                            <small class="text-muted d-block mt-2">Format file yang didukung: png</small>
                         </div>
                     </div>
                 </div>

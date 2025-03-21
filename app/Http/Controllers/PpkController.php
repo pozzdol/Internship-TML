@@ -183,6 +183,7 @@ class PpkController extends Controller
                 }
             }
             $lastPpk = Ppk::latest()->first();
+            dd($lastPpk);
             $sequence = $lastPpk ? intval(substr($lastPpk->nomor_surat, 0, 3)) + 1 : 1;
             $nomor = str_pad($sequence, 3, '0', STR_PAD_LEFT);
             $bulan = date('m');
@@ -192,6 +193,12 @@ class PpkController extends Controller
             $user = User::find($request->penerima);
             $divisi = $request->divisipenerima ?? $user->divisi;
             $nomorSurat = "$nomor/MFG/$divisi/$bulan/$tahun-$semester";
+
+            while (Ppk::where('nomor_surat', $nomorSurat)->exists()) {
+                $sequence++;  // Meningkatkan urutan
+                $nomor = str_pad($sequence, 3, '0', STR_PAD_LEFT);
+                $nomorSurat = "$nomor/MFG/$divisi/$bulan/$tahun-$semester"; // Membuat nomor surat baru
+            }
 
             $buatppk = Ppk::create([
                 'judul' => $request->judul,
@@ -899,9 +906,40 @@ class PpkController extends Controller
     {
         // Ambil data berdasarkan id_formppk
         $ppk = Ppkketiga::where('id_formppk', $id)->firstOrFail();
+        $ppkdua = Ppkkedua::where('id_formppk', $id)->first();
+        $ppksatu = Ppk::where('id', $id)->first();
+
+        $signaturePath = $ppksatu->signature ? public_path('admin/img/' . $ppksatu->signature) : null;
+        $signaturePathPenerima = $ppkdua->signaturepenerima ? public_path('admin/img/' . $ppkdua->signaturepenerima) : null;
+        $signatureBase64 = null;
+        if ($signaturePath && file_exists($signaturePath)) {
+            $imageData = base64_encode(file_get_contents($signaturePath));
+            $extension = pathinfo($signaturePath, PATHINFO_EXTENSION);
+            $signatureBase64 = "data:image/{$extension};base64,{$imageData}";
+        }
+        $signatureBase64Penerima = null;
+        if ($signaturePathPenerima && file_exists($signaturePathPenerima)) {
+            $imageData = base64_encode(file_get_contents($signaturePathPenerima));
+            $extension = pathinfo($signaturePathPenerima, PATHINFO_EXTENSION);
+            $signatureBase64Penerima = "data:image/{$extension};base64,{$imageData}";
+        }
+
+        $data = [
+            'nomor_surat' => $ppksatu->nomor_surat,
+            'judul' => $ppksatu->judul,
+            'divisipenerima' => $ppksatu->divisipenerima,
+            'divisipembuat' => $ppksatu->divisipembuat,
+            'jenisketidaksesuaian' => $ppksatu->jenisketidaksesuaian,
+            'evidence' => json_decode($ppksatu->evidence, true),
+            'signature' => $signatureBase64,
+            'signaturepenerima' => $signatureBase64Penerima,
+        ];
+
+        // dd($ppkdua->picUser);
+
         $users = User::all(); // Ambil semua data pengguna untuk dropdown PIC
         $verifikasiFiles = $ppk->verifikasi_img ? explode(',', $ppk->verifikasiFiles) : [];
-        return view('ppk.edit3', compact('ppk', 'users', 'verifikasiFiles'));
+        return view('ppk.edit3', compact('ppk', 'users', 'verifikasiFiles', 'ppkdua', 'ppksatu', 'data'));
     }
 
     public function exportSingle($id)
@@ -916,8 +954,82 @@ class PpkController extends Controller
         return Excel::download(new PpkExport($ppk, $ppkdua, $ppktiga), $fileName);
     }
 
+    public function view($id)
+    {
+        // Ambil data PPK berdasarkan ID
+        $ppk = Ppk::with('pembuatUser', 'penerimaUser')->findOrFail($id);
+
+        // Ambil data dari tabel Ppkkedua berdasarkan id_formppk
+        $ppkkedua = Ppkkedua::where('id_formppk', $id)->first();
+        $ppkketiga = Ppkketiga::where('id_formppk', $id)->first();
+
+        // Dapatkan path dari signature
+        $signaturePath = $ppk->signature ? public_path('admin/img/' . $ppk->signature) : null;
+        $signaturePath2 = $ppkkedua && $ppkkedua->signaturepenerima ? public_path('admin/img/' . $ppkkedua->signaturepenerima) : null;
+
+        // Konversi signature ke base64 jika tersedia
+        $signatureBase64 = null;
+        if ($signaturePath && file_exists($signaturePath)) {
+            $imageData = base64_encode(file_get_contents($signaturePath));
+            $extension = pathinfo($signaturePath, PATHINFO_EXTENSION);
+            $signatureBase64 = "data:image/{$extension};base64,{$imageData}";
+        }
+        $signaturePenerimaBase64 = null;
+        if ($signaturePath2 && file_exists($signaturePath2)) {
+            $imageData = base64_encode(file_get_contents($signaturePath2));
+            $extension = pathinfo($signaturePath2, PATHINFO_EXTENSION);
+            $signaturePenerimaBase64 = "data:image/{$extension};base64,{$imageData}";
+        }
+
+        $pic1Ids = $ppkkedua->pic1 ? explode(',', $ppkkedua->pic1) : [];
+        $pic2Ids = $ppkkedua->pic2 ? explode(',', $ppkkedua->pic2) : [];
+        // Data tambahan untuk view
+        $data = [
+            'ppk' => $ppk,
+            'judul' => $ppk->judul,
+            'nomor_surat' => $ppk->nomor_surat,
+            'pembuat' => $ppk->pembuat,
+            'emailpembuat' => $ppk->emailpembuat,
+            'divisipembuat' => $ppk->divisipembuat,
+            'penerima' => $ppk->penerima,
+            'emailpenerima' => $ppk->emailpenerima,
+            'divisipenerima' => $ppk->divisipenerima,
+            'jenisketidaksesuaian' => $ppk->jenisketidaksesuaian,
+            'evidence' => json_decode($ppk->evidence, true),
+            'created_at' => $ppk->created_at,
+            'signature' => $signatureBase64, // Berisi data base64 dari signature
+            'signaturepenerima' => $signaturePenerimaBase64,
+        ];
+
+        if ($ppkkedua) {
+            $data['identifikasi'] = $ppkkedua->identifikasi;
+            $data['penanggulangan'] = $ppkkedua->penanggulangan;
+            $data['pencegahan'] = $ppkkedua->pencegahan;
+            $data['tgl_penanggulangan'] = $ppkkedua->tgl_penanggulangan;
+            $data['tgl_pencegahan'] = $ppkkedua->tgl_pencegahan;
+            $data['pic1'] = $pic1Ids ? User::whereIn('id', $pic1Ids)->pluck('nama_user')->implode(', ') : ($ppkkedua->pic1_other ?? '-');
+            $data['pic2'] = $pic2Ids ? User::whereIn('id', $pic2Ids)->pluck('nama_user')->implode(', ') : ($ppkkedua->pic2_other ?? '-');
+            $data['pic1_other'] = $ppkkedua->pic1_other;
+            $data['pic2_other'] = $ppkkedua->pic2_other;
+            $data['signaturepenerima'] = $signaturePenerimaBase64;
+            $data['created_at'] = $ppkkedua->updated_at;
+        }
+        if ($ppkketiga) {
+            $data['verifikasi'] = $ppkketiga->verifikasi;
+            $data['verifikasi_img'] = $ppkketiga->verifikasi_img;
+            $data['tinjauan'] = $ppkketiga->tinjauan;
+            $data['status'] = $ppkketiga->status;
+            $data['created_at_ppkketiga'] = $ppkketiga->updated_at;
+            $data['newppk'] = $ppkketiga->newppk;
+        }
+        return view('ppk.view', $data);
+    }
+
     public function generatePdf($id)
     {
+
+        // $formattedData = $this->dataPrint($request);
+        // return view('pdf.pdf', $formattedData);
         // Ambil data PPK berdasarkan ID
         $ppk = Ppk::with('pembuatUser', 'penerimaUser')->findOrFail($id);
 

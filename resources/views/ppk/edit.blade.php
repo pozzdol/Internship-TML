@@ -140,11 +140,20 @@
 
                             {{-- Auto resizing textarea --}}
                             <script>
+                                // Mendapatkan elemen textarea
                                 const textarea = document.getElementById('judul');
-                                textarea.addEventListener('input', function() {
-                                    this.style.height = 'auto';
-                                    this.style.height = (this.scrollHeight) + 'px';
-                                });
+
+                                // Fungsi untuk mengubah tinggi textarea sesuai dengan isi
+                                function autoResizeTextarea() {
+                                    textarea.style.height = 'auto'; // Reset tinggi terlebih dahulu
+                                    textarea.style.height = (textarea.scrollHeight) + 'px'; // Set tinggi sesuai dengan scrollHeight
+                                }
+
+                                // Menambahkan event listener untuk input
+                                textarea.addEventListener('input', autoResizeTextarea);
+
+                                // Panggil fungsi untuk mengatur tinggi saat halaman pertama kali dimuat
+                                autoResizeTextarea();
                             </script>
 
                         </div>
@@ -208,7 +217,7 @@
                                     </div>
                                     <div class="col">
                                         <img src="{{ asset('admin/img/' . $ppk->signature) }}" alt="Signature"
-                                            class="img-fluid" style="max-width: 150px; height: auto;">
+                                            class="img-fluid" style="max-width: 150px; max-height: 70px;">
                                     </div>
                                 </div>
                                 <div class="row mt-3">

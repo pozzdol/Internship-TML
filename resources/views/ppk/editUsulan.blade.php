@@ -2,7 +2,8 @@
 @section('content')
     <div class="card shadow-lg border-0">
         <div class="border border-2 border-dark">
-            <h5 class="card-title text-center text-uppercase fw-bold text-dark">Proses Peningkatan Kinerja
+            <h5 class="card-title text-center text-uppercase fw-bold text-dark">
+                Proses Peningkatan Kinerja
             </h5>
             <div class="mb-2 border border-1 border-dark"></div>
             <!-- Informasi Utama -->
@@ -110,8 +111,7 @@
                                 <strong> {{ $ppklengkap->pembuatUser->nama_user }} </strong>
                             </div>
                             <div class="col">
-                                <img src="{{ $datalengkap['signature'] }}"
-                                    style="max-width: 100px; height: 50px; object-fit: cover; overflow: hidden;">
+                                <img src="{{ $datalengkap['signature'] }}" style="max-width: 130px; max-height:70px; ">
                             </div>
                         </div>
                         <div class="row mt-4">
@@ -122,7 +122,7 @@
                             </div>
                             <div class="col">
                                 <img src="{{ $datalengkap['signaturePathPenerima'] }}"
-                                    style="max-width: 100px; height: 50px; object-fit: cover; overflow: hidden;">
+                                    style="max-width: 130px; max-height:70px; ">
                             </div>
                         </div>
                     </div>
@@ -274,7 +274,9 @@
                                         </div>
                                         <!-- Textarea PIC Other -->
                                         <div id="pic2-other" class="pic2-other" style="display: none;">
-                                            <textarea name="pic2_other" id="pic2_other" class="form-control">{{ old('pic2_other', $ppk->pic2_other) }}</textarea>
+                                            <textarea name="pic2_other" id="pic2_other" class="form-control">
+                                                {{ old('pic2_other', $ppk->pic2_other) }}
+                                            </textarea>
                                         </div>
                                     </div>
                                     <div style="text-align: right;">
@@ -288,16 +290,17 @@
                         </tbody>
                     </table>
                     <div class="mb-3 d-none">
-                        <label for="identifikasi" class="form-label fw-bold">2. Identifikasi, evaluasi & pastikan akar
-                            penyebab
-                            masalah/Root Cause</label>
+                        <label for="identifikasi" class="form-label fw-bold">
+                            2. Identifikasi, evaluasi & pastikan akar penyebab masalah/Root Cause
+                        </label>
                         <br>
                         <br>
                         <textarea placeholder="Masukan identifikasi" name="identifikasi" class="form-control" id="identifikasi"
-                            rows="7">{{ old('identifikasi', $ppk->identifikasi) }}</textarea>
+                            rows="7">
+                            {{ old('identifikasi', $ppk->identifikasi) }}
+                        </textarea>
                         <span style="font-size: 0.750em;">*Gunakan metode 5WHYS untuk menentukan Root Cause; Fish Bone;
-                            Diagram
-                            alir; Penilaian situasi; Kendali proses dan peningkatan.</span>
+                            Diagram alir; Penilaian situasi; Kendali proses dan peningkatan.</span>
                     </div>
                     {{-- auto resizing text area --}}
                     <script>
@@ -404,13 +407,14 @@
                     </script>
                     <div class="row mt-3">
                         <div class="col-md-7 text-center">
-                            <p>Tanggal : <span class="ps-5"
-                                    style="border-bottom: 1px solid #000">{{ \Carbon\Carbon::parse($ppk->updated_at)->translatedFormat('d F Y') }}</span>
+                            <p>Tanggal : <span class="ps-5" style="border-bottom: 1px solid #000">
+                                    {{ \Carbon\Carbon::parse($ppk->updated_at)->translatedFormat('d F Y') }}
+                                </span>
                             </p>
                         </div>
                         <div class="col text-start d-flex">
                             <p>Tanda Tangan :<br /><strong>{{ $ppklengkap->penerimaUser->nama_user }}</strong></p>
-                            <img src="{{ $datalengkap['signaturePathPenerima'] }}" alt="Signature" width="100">
+                            <img src="{{ $datalengkap['signaturePathPenerima'] }}" alt="Signature" height="70">
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center mt-3">

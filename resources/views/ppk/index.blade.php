@@ -238,7 +238,8 @@
                             </td>
 
                             <td style="text-align: center;">
-                                <a href="" class="btn btn-outline-dark btn-sm" title="View Form">
+                                <a href="{{ route('ppk.view', $ppk->id) }}" class="btn btn-outline-dark btn-sm"
+                                    title="View Form">
                                     <i class="bi bi-eye-fill"></i>
                                 </a>
                             </td>
@@ -333,9 +334,10 @@
 
                             <div class="row">
                                 <div class="col-md-12 d-flex justify-content-between">
-                                    <button type="reset" class="btn btn-warning px-4 d-flex align-items-center">
+                                    <a href="{{ route('ppk.index') }}"
+                                        class="btn btn-warning px-4 d-flex align-items-center">
                                         <i class="bi bi-arrow-clockwise me-2"></i> Reset
-                                    </button>
+                                    </a>
                                     <button type="submit" class="btn btn-primary px-4 d-flex align-items-center">
                                         <i class="fa fa-filter"></i> Filter
                                     </button>

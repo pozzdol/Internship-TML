@@ -2,8 +2,8 @@
 
 @section('content')
     <!-- Pastikan Bootstrap Icons sudah terpasang. Jika belum, tambahkan link berikut di head layout utama:
-                                                                                                                                                         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-                                                                                                                                                    -->
+                                                                                                                                                                                                                                                                     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+                                                                                                                                                                                                                                                                -->
 
     <body>
         <div class="card shadow-lg border-0">
@@ -76,10 +76,10 @@
                             Ketidaksesuaian*</label>
                         <div class="row">
                             @foreach (['SISTEM' => 'bi-cpu', 'PROSES' => 'bi-gear', 'PRODUK' => 'bi-box-seam', 'AUDIT' => 'bi-search'] as $type => $icon)
-                                <div class="col-md-3">
+                                <div class="col-md-3 d-flex justify-content-center">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="jenisketidaksesuaian[]"
-                                            value="{{ $type }}">
+                                        <input class="form-check-input border-dark" type="checkbox"
+                                            name="jenisketidaksesuaian[]" value="{{ $type }}">
                                         <label class="form-check-label">
                                             <i class="bi {{ $icon }}"></i> {{ ucfirst(strtolower($type)) }}
                                         </label>
@@ -91,75 +91,83 @@
 
 
                     <!-- Pembuat dan Divisi Pembuat -->
-                    <div class="row g-3 my-3">
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold"><i class="bi bi-person-badge"></i> Nama Inisiator*</label>
-                            <select id="pembuat" name="pembuat" class="form-select">
-                                @if (auth()->user()->role !== 'admin')
-                                    <option value="">Pilih Pembuat</option>
+                    <div
+                        style="background-color: rgb(248, 249, 250); margin-bottom: 50px; padding: 10px 20px; border:1px solid #ddd; border-radius: 12px;">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6 ">
+                                <label class="form-label fw-bold"><i class="bi bi-person-badge"></i> Nama Inisiator*</label>
+                                <select id="pembuat" name="pembuat" class="form-select">
+                                    @if (auth()->user()->role !== 'admin')
+                                        <option value="">Pilih Pembuat</option>
 
-                                    <option value="{{ auth()->user()->nama_user }}" data-email="{{ auth()->user()->email }}"
-                                        data-divisi="{{ auth()->user()->divisi }}">
-                                        {{ auth()->user()->nama_user }}
-                                    </option>
-                                @else
-                                    <option value="">Pilih Pembuat</option>
+                                        <option value="{{ auth()->user()->nama_user }}"
+                                            data-email="{{ auth()->user()->email }}"
+                                            data-divisi="{{ auth()->user()->divisi }}">
+                                            {{ auth()->user()->nama_user }}
+                                        </option>
+                                    @else
+                                        <option value="">Pilih Pembuat</option>
+                                        @foreach ($data as $user)
+                                            <option value="{{ $user->nama_user }}" data-email="{{ $user->email }}"
+                                                data-divisi="{{ $user->divisi }}">
+                                                {{ $user->nama_user }}
+                                            </option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold"><i class="bi bi-building"></i> Divisi Inisiator*</label>
+                                <input type="text" id="divisipembuat" name="divisipembuat" class="form-control" readonly>
+                            </div>
+                        </div>
+
+
+                        <div class="row g-3 mb-3">
+                            <!-- Email Inisiator -->
+                            <div class="col-md-6">
+                                <label for="emailpembuat" class="form-label fw-bold"><i class="bi bi-envelope"></i> Email
+                                    Inisiator*</label>
+                                <input type="email" id="emailpembuat" name="emailpembuat" class="form-control"
+                                    placeholder="Email" value="{{ old('emailpembuat') }}" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Penerima -->
+                    <div
+                        style="background-color: rgb(248, 249, 250); margin-bottom: 50px; padding: 10px 20px; border:1px solid #ddd; border-radius: 12px;">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="penerima" class="form-label fw-bold"><i class="bi bi-person-badge"></i> Nama
+                                    Penerima*</label>
+                                <select id="penerima" name="penerima" class="form-select">
+                                    <option value="">Pilih Penerima</option>
                                     @foreach ($data as $user)
-                                        <option value="{{ $user->nama_user }}" data-email="{{ $user->email }}"
+                                        <option value="{{ $user->id }}" data-email="{{ $user->email }}"
                                             data-divisi="{{ $user->divisi }}">
                                             {{ $user->nama_user }}
                                         </option>
                                     @endforeach
-                                @endif
-                            </select>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="divisipenerima" class="form-label fw-bold"><i class="bi bi-building"></i>
+                                    Divisi
+                                    Penerima*</label>
+                                <input type="text" name="divisipenerima" id="divisipenerima" class="form-control"
+                                    placeholder="Divisi" value="{{ old('divisipenerima') }}" readonly>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold"><i class="bi bi-building"></i> Divisi Inisiator*</label>
-                            <input type="text" id="divisipembuat" name="divisipembuat" class="form-control" readonly>
-                        </div>
-                    </div>
-
-
-                    <div class="row g-3 mb-3">
-                        <!-- Email Inisiator -->
-                        <div class="col-md-6">
-                            <label for="emailpembuat" class="form-label fw-bold"><i class="bi bi-envelope"></i> Email
-                                Inisiator*</label>
-                            <input type="email" id="emailpembuat" name="emailpembuat" class="form-control"
-                                placeholder="Email" value="{{ old('emailpembuat') }}" readonly>
-                        </div>
-                    </div>
-
-                    <hr>
-                    <!-- Penerima -->
-                    <div class="row g-3 mb-3">
-                        <div class="col-md-6">
-                            <label for="penerima" class="form-label fw-bold"><i class="bi bi-person-badge"></i> Nama
-                                Penerima*</label>
-                            <select id="penerima" name="penerima" class="form-select">
-                                <option value="">Pilih Penerima</option>
-                                @foreach ($data as $user)
-                                    <option value="{{ $user->id }}" data-email="{{ $user->email }}"
-                                        data-divisi="{{ $user->divisi }}">
-                                        {{ $user->nama_user }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="divisipenerima" class="form-label fw-bold"><i class="bi bi-building"></i> Divisi
-                                Penerima*</label>
-                            <input type="text" name="divisipenerima" id="divisipenerima" class="form-control"
-                                placeholder="Divisi" value="{{ old('divisipenerima') }}" readonly>
-                        </div>
-                    </div>
-                    <div class="row g-3 mb-3">
-                        <!-- Email Penerima -->
-                        <div class="col-md-6">
-                            <label for="emailpenerima" class="form-label fw-bold"><i class="bi bi-envelope"></i> Email
-                                Penerima*</label>
-                            <input type="email" id="emailpenerima" name="emailpenerima" class="form-control"
-                                placeholder="Email" value="{{ old('emailpenerima') }}" readonly>
+                        <div class="row g-3 mb-3">
+                            <!-- Email Penerima -->
+                            <div class="col-md-6">
+                                <label for="emailpenerima" class="form-label fw-bold"><i class="bi bi-envelope"></i>
+                                    Email
+                                    Penerima*</label>
+                                <input type="email" id="emailpenerima" name="emailpenerima" class="form-control"
+                                    placeholder="Email" value="{{ old('emailpenerima') }}" readonly>
+                            </div>
                         </div>
                     </div>
                     <br>
