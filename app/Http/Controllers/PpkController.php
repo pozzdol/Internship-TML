@@ -97,7 +97,7 @@ class PpkController extends Controller
         // Ambil daftar pengguna untuk dropdown
         $userList = User::orderBy('nama_user', 'asc')->pluck('nama_user', 'id');
 
-
+       
         // Kirim data ke view
         return view('ppk.index2', compact('ppks', 'userList', 'statusPpkList', 'status', 'user'));
     }
@@ -182,21 +182,37 @@ class PpkController extends Controller
                     $evidences[] = 'evidence/' . $filename;
                 }
             }
+
             $lastPpk = Ppk::latest()->first();
-            dd($lastPpk);
-            $sequence = $lastPpk ? intval(substr($lastPpk->nomor_surat, 0, 3)) + 1 : 1;
+            $lastYear = $lastPpk ? substr($lastPpk->nomor_surat, -9, 4) : ''; // Mendapatkan tahun dari nomor surat terakhir
+            $currentYear = date('Y'); // Tahun saat ini
+
+            // Jika tahun terakhir berbeda dengan tahun saat ini, reset urutan ke 1
+            if ($lastYear !== $currentYear) {
+                $sequence = 1;
+            } else {
+                // Jika tahun sama, ambil urutan nomor terakhir dan tambahkan 1
+                $sequence = $lastPpk ? intval(substr($lastPpk->nomor_surat, 0, 3)) + 1 : 1;
+            }
+
+            // Membuat nomor dengan format tiga digit
             $nomor = str_pad($sequence, 3, '0', STR_PAD_LEFT);
+
+            // Mendapatkan bulan dan semester
             $bulan = date('m');
             $tahun = date('Y');
             $semester = ($bulan <= 6) ? 'SEM 1' : 'SEM 2';
 
+            // Menentukan penerima dan divisi
             $user = User::find($request->penerima);
             $divisi = $request->divisipenerima ?? $user->divisi;
+            // Membuat nomor surat
             $nomorSurat = "$nomor/MFG/$divisi/$bulan/$tahun-$semester";
 
+            // Pastikan nomor surat unik
             while (Ppk::where('nomor_surat', $nomorSurat)->exists()) {
                 $sequence++;  // Meningkatkan urutan
-                $nomor = str_pad($sequence, 3, '0', STR_PAD_LEFT);
+                $nomor = str_pad($sequence, 3, '0', STR_PAD_LEFT);  // Membuat nomor tiga digit
                 $nomorSurat = "$nomor/MFG/$divisi/$bulan/$tahun-$semester"; // Membuat nomor surat baru
             }
 
@@ -218,7 +234,9 @@ class PpkController extends Controller
 
             // Membuat Data Terkait di Tabel Lain
             Ppkkedua::create(['id_formppk' => $buatppk->id]);
-            Ppkketiga::create(['id_formppk' => $buatppk->id]);
+            Ppkketiga::create([
+                'id_formppk' => $buatppk->id,
+            ]);
 
 
             $penerimaUser = User::find($request->penerima); // Ambil user berdasarkan ID penerima

@@ -99,25 +99,25 @@
                         <table class="table table-striped" style="width: 300%; font-size: 10px;">
                             <thead>
                                 <tr>
-                                    <th class="no">No</th>
-                                    <th class="tanggal">Tanggal Terbit</th>
-                                    <th class="surat">No. PPK</th>
-                                    <th class="judul">Nama PPK</th>
-                                    <th class="tanggal">Status PPK</th>
-                                    <th class="tanggal">Target Verifikasi</th>
-                                    <th class="tanggal">Departemen Inisiator</th>
-                                    <th class="tanggal">Pembuat / Inisiator</th>
-                                    <th class="tanggal">Penerima</th>
-                                    <th class="tanggal">Departemen Penerima</th>
-                                    <th class="tanggal">Alamat Email Penerima</th>
-                                    <th class="tanggal">Jenis Ketidaksesuaian (SISTEM)</th>
-                                    <th class="tanggal">Jenis Ketidaksesuaian (PROSES)</th>
-                                    <th class="tanggal">Jenis Ketidaksesuaian (PRODUK)</th>
-                                    <th class="tanggal">Jenis Ketidaksesuaian (AUDIT)</th>
-                                    <th class="tanggal">CC Email</th>
-                                    <th class="tanggal">Email Address</th>
+                                    <th class="text-center no">No</th>
+                                    <th class="text-center tanggal">Tanggal Terbit</th>
+                                    <th class="text-center surat">No. PPK</th>
+                                    <th class="text-center judul">Nama PPK</th>
+                                    <th class="text-center tanggal">Status PPK</th>
+                                    <th class="text-center tanggal">Target Verifikasi</th>
+                                    <th class="text-center tanggal">Departemen Inisiator</th>
+                                    <th class="text-center tanggal">Pembuat / Inisiator</th>
+                                    <th class="text-center tanggal">Penerima</th>
+                                    <th class="text-center tanggal">Departemen Penerima</th>
+                                    <th class="text-center tanggal">Alamat Email Penerima</th>
+                                    <th class="text-center tanggal">Jenis Ketidaksesuaian (SISTEM)</th>
+                                    <th class="text-center tanggal">Jenis Ketidaksesuaian (PROSES)</th>
+                                    <th class="text-center tanggal">Jenis Ketidaksesuaian (PRODUK)</th>
+                                    <th class="text-center tanggal">Jenis Ketidaksesuaian (AUDIT)</th>
+                                    <th class="text-center tanggal">CC Email</th>
+                                    <th class="text-center tanggal">Email Address</th>
                                     @if (auth()->user()->role === 'admin')
-                                        <th class="tanggal">Action</th>
+                                        <th class="text-center tanggal">Action</th>
                                     @endif
                                 </tr>
                             </thead>
@@ -125,7 +125,7 @@
                                 @foreach ($ppks as $ppk)
                                     <tr>
                                         <td style="text-align: center;">{{ $loop->iteration }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($ppk->created_at)->format('Y-m-d') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($ppk->created_at)->format('d / m / Y') }}</td>
                                         <td>
                                             <a href="{{ route('ppk.pdf', $ppk->id) }}" title="Export to PDF">
                                                 {{ $ppk->nomor_surat ?? 'Tidak ada nomor surat' }}
@@ -137,35 +137,35 @@
                                             @endif
                                         </td>
                                         <td>{{ $ppk->statusppk }}</td>
-                                        <td>{{ $ppk->formppk3 ? \Carbon\Carbon::parse($ppk->formppk3->created_at)->format('Y-m-d') : 'Tidak Ada' }}
+                                        <td>{{ $ppk->formppk2->updated_at ? \Carbon\Carbon::parse($ppk->formppk2->updated_at)->addMonth()->format('d / m / Y') : 'Form Identifikasi belum diisi' }}
                                         </td>
                                         <td>{{ $ppk->divisipembuat }}</td>
                                         <td>{{ $ppk->pembuatUser->nama_user ?? 'null' }}</td>
                                         <td>{{ $ppk->penerimaUser->nama_user ?? 'null' }}</td>
                                         <td>{{ $ppk->divisipenerima }}</td>
                                         <td>{{ $ppk->emailpenerima }}</td>
-                                        <td>
+                                        <td class="text-center">
                                             @if (strpos($ppk->jenisketidaksesuaian, 'SISTEM') !== false)
                                                 <i class="fa fa-check"></i>
                                                 <!-- Menampilkan ikon ceklis jika ada 'SISTEM' -->
                                             @endif
                                         </td>
 
-                                        <td>
+                                        <td class="text-center">
                                             @if (strpos($ppk->jenisketidaksesuaian, 'PROSES') !== false)
                                                 <i class="fa fa-check"></i>
                                                 <!-- Menampilkan ikon ceklis jika ada 'PROSES' -->
                                             @endif
                                         </td>
 
-                                        <td>
+                                        <td class="text-center">
                                             @if (strpos($ppk->jenisketidaksesuaian, 'PRODUK') !== false)
                                                 <i class="fa fa-check"></i>
                                                 <!-- Menampilkan ikon ceklis jika ada 'PRODUK' -->
                                             @endif
                                         </td>
 
-                                        <td>
+                                        <td class="text-center">
                                             @if (strpos($ppk->jenisketidaksesuaian, 'AUDIT') !== false)
                                                 <i class="fa fa-check"></i>
                                                 <!-- Menampilkan ikon ceklis jika ada 'AUDIT' -->
@@ -286,9 +286,7 @@
                                         </td>
                                     </tr>
                                 @endforeach
-
                             </tbody>
-
                         </table>
                     </div>
                 </div>
